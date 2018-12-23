@@ -11,7 +11,7 @@ joystick_present = joystick.get_count() > 0
 
 if joystick_present:
     joyin = joystick.Joystick(0)
-    joyin.init
+    joyin.init()
 
 
 def draw(): # Pygame Zero draw function
@@ -130,12 +130,18 @@ def drawLasers():
     for l in range(len(lasers)): lasers[l].draw()
 
 def check_input():
-    global player, score
-    if keyboard.left:
+    global player, score, joyin, joystick_present
+    xaxis = yaxis = fire_button_pressed = 0
+
+    if joystick_present:
+        xaxis = joyin.get_axis(0)
+        fire_button_pressed = joyin.get_button(0)
+    
+    if keyboard.left or xaxis < -0.8:
         if player.x > 40: player.x -= 5
-    if keyboard.right:
+    if keyboard.right or xaxis > 0.8:
         if player.x < 760: player.x += 5
-    if keyboard.space:
+    if keyboard.space or fire_button_pressed:
         if player.laserActive == 1:
             sounds.gun.play()
             player.laserActive = 0
