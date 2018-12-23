@@ -4,6 +4,7 @@ from random import randint
 player = Actor("player", (400, 550))
 boss = Actor("boss")
 gameStatus = 0
+name_index = 0
 highScore = []
 
 joystick.init()
@@ -43,11 +44,18 @@ def drawCentreText(t):
     
 def update(): # Pygame Zero update function
     global moveCounter, player, gameStatus, lasers, level, boss, \
-    joyin, joystick_present
+    joyin, joystick_present, name_index
 
     if gameStatus == 0:
         if keyboard.RETURN or (joystick_present and joyin.get_button(0)): 
             gameStatus = 1
+        if keyboard.UP or (joystick_present and 
+        (joyin.get_axis(1) < -0.8 or str(joyin.get_hat(0)) == "(0, 1)")): 
+            clock.schedule_unique(increment_name, 0.05)
+        if keyboard.DOWN or (joystick_present and 
+        (joyin.get_axis(1) > 0.8 or str(joyin.get_hat(0)) == "(0, -1)")): 
+            clock.schedule_unique(decrement_name, 0.05)
+            
     if gameStatus == 1:
         if player.status < 30 and len(aliens) > 0:
             check_input()
@@ -78,7 +86,35 @@ def update(): # Pygame Zero update function
         if keyboard.ESCAPE or (joystick_present and joyin.get_button(7)):
             init()
             gameStatus = 0
-            
+
+def increment_name():
+    global name_index
+
+    current_char = ord(player.name[name_index])
+    #chr(32) == ' '
+    if current_char == 32:
+        player.name = 'A' + player.name[1:] 
+    elif current_char < 90: 
+        player.name = str(chr(ord(player.name[name_index]) + 1)) \
+        + player.name[1:]
+    #chr(90) == 'Z'
+    elif current_char == 90:
+        player.name = ' ' + player.name[1:] 
+    
+
+def decrement_name():
+    global name_index
+
+    current_char = ord(player.name[name_index])
+    #chr(32) == ' '
+    if current_char == 32:
+        player.name = 'Z' + player.name[1:]
+    #chr(65) == A
+    elif current_char == 65:
+        player.name = ' ' + player.name[1:]
+    elif current_char > 65: 
+        player.name = str(chr(current_char - 1)) + player.name[1:]
+
 def on_key_down(key):
     global player
     if gameStatus == 0 and key.name != "RETURN":
@@ -269,9 +305,8 @@ def init():
     player.images = ["player","explosion1","explosion2","explosion3","explosion4","explosion5"]
     player.laserActive = 1
     player.lives = 3
-    player.name = "AAA"
+    player.name = "AAAAAA"
     level = 1
-    name_index = 0
 
 def initAliens():
     global aliens, moveCounter, moveSequence
