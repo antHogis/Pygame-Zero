@@ -1,9 +1,18 @@
 import pgzrun, math, re, time
+from pygame import joystick
 from random import randint
 player = Actor("player", (400, 550))
 boss = Actor("boss")
 gameStatus = 0
 highScore = []
+
+joystick.init()
+joystick_present = joystick.get_count() > 0
+
+if joystick_present:
+    joyin = joystick.Joystick(0)
+    joyin.init
+
 
 def draw(): # Pygame Zero draw function
     screen.blit('background', (0, 0))
