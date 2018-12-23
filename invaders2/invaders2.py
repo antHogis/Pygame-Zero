@@ -13,7 +13,6 @@ if joystick_present:
     joyin = joystick.Joystick(0)
     joyin.init()
 
-
 def draw(): # Pygame Zero draw function
     screen.blit('background', (0, 0))
     if gameStatus == 0: # display the title page
@@ -43,9 +42,12 @@ def drawCentreText(t):
     screen.draw.text(t , center=(400, 300), owidth=0.5, ocolor=(255,255,255), color=(255,64,0) , fontsize=60)
     
 def update(): # Pygame Zero update function
-    global moveCounter, player, gameStatus, lasers, level, boss
+    global moveCounter, player, gameStatus, lasers, level, boss, \
+    joyin, joystick_present
+
     if gameStatus == 0:
-        if keyboard.RETURN and player.name != "": gameStatus = 1
+        if keyboard.RETURN or (joystick_present and joyin.get_button(0)): 
+            gameStatus = 1
     if gameStatus == 1:
         if player.status < 30 and len(aliens) > 0:
             check_input()
@@ -59,7 +61,7 @@ def update(): # Pygame Zero update function
                 if player.status == 30:
                     player.lives -= 1
         else:
-            if keyboard.RETURN:
+            if keyboard.RETURN or (joystick_present and joyin.get_button(0)):
                 if player.lives > 0:
                     player.status = 0
                     lasers = []
@@ -73,7 +75,7 @@ def update(): # Pygame Zero update function
                     gameStatus = 2
                     writeHighScore()
     if gameStatus == 2:
-        if keyboard.ESCAPE:
+        if keyboard.ESCAPE or (joystick_present and joyin.get_button(7)):
             init()
             gameStatus = 0
             
@@ -131,7 +133,7 @@ def drawLasers():
 
 def check_input():
     global player, score, joyin, joystick_present
-    xaxis = yaxis = fire_button_pressed = 0
+    xaxis = fire_button_pressed = 0
 
     if joystick_present:
         xaxis = joyin.get_axis(0)
@@ -267,8 +269,9 @@ def init():
     player.images = ["player","explosion1","explosion2","explosion3","explosion4","explosion5"]
     player.laserActive = 1
     player.lives = 3
-    player.name = ""
+    player.name = "AAA"
     level = 1
+    name_index = 0
 
 def initAliens():
     global aliens, moveCounter, moveSequence
