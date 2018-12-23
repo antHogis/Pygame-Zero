@@ -48,7 +48,7 @@ def update(): # Pygame Zero update function
         if keyboard.RETURN and player.name != "": gameStatus = 1
     if gameStatus == 1:
         if player.status < 30 and len(aliens) > 0:
-            checkKeys()
+            check_input()
             updateLasers()
             updateBoss()
             if moveCounter == 0: updateAliens()
@@ -129,7 +129,7 @@ def drawBases():
 def drawLasers():
     for l in range(len(lasers)): lasers[l].draw()
 
-def checkKeys():
+def check_input():
     global player, score
     if keyboard.left:
         if player.x > 40: player.x -= 5
