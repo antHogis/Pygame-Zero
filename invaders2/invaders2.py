@@ -59,7 +59,6 @@ def update(): # Pygame Zero update function
             clock.schedule_unique(increment_name_index, 0.025)
         elif name_index < len(player.name) and keyboard.RIGHT:
             clock.schedule_unique(decrement_name_index, 0.025)
-        print(name_index)
             
     if gameStatus == 1:
         if player.status < 30 and len(aliens) > 0:
@@ -93,32 +92,41 @@ def update(): # Pygame Zero update function
             gameStatus = 0
 
 def increment_name_chr():
-    global name_index
+    global name_index, player
 
     current_char = ord(player.name[name_index])
     #chr(32) == ' '
     if current_char == 32:
-        player.name = 'A' + player.name[1:] 
+        current_char = 'A'
     elif current_char < 90: 
-        player.name = str(chr(ord(player.name[name_index]) + 1)) \
-        + player.name[1:]
+        current_char = str(chr(current_char + 1))
     #chr(90) == 'Z'
     elif current_char == 90:
-        player.name = ' ' + player.name[1:] 
+        current_char = ' '
+    
+    player.name = list(player.name)
+    player.name[name_index] = current_char
+    player.name = "".join(player.name)
+    
     
 
 def decrement_name_chr():
     global name_index
+    index = name_index + 1
 
     current_char = ord(player.name[name_index])
     #chr(32) == ' '
     if current_char == 32:
-        player.name = 'Z' + player.name[1:]
+        current_char = 'Z'
     #chr(65) == A
     elif current_char == 65:
-        player.name = ' ' + player.name[1:]
+        current_char = ' '
     elif current_char > 65: 
-        player.name = str(chr(current_char - 1)) + player.name[1:]
+        current_char = str(chr(current_char - 1))
+
+    player.name = list(player.name)
+    player.name[name_index] = current_char
+    player.name = "".join(player.name)
 
 def increment_name_index():
     global name_index
