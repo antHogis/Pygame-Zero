@@ -1,3 +1,4 @@
+import pgzrun
 from random import randint
 WIDTH = 700 # Width of window
 HEIGHT = 800 # Height of window
@@ -62,7 +63,7 @@ def updateTrack(): # Function to update where the track blocks appear
                             
 # End of functions
 makeTrack() # Make first block of track
-
+pgzrun.go()
 	
 	
 
