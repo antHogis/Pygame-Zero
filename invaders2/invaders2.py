@@ -55,13 +55,12 @@ def update(): # Pygame Zero update function
         elif keyboard.DOWN or (joystick_present and 
         (joyin.get_axis(1) > 0.8 or str(joyin.get_hat(0)) == "(0, -1)")): 
             clock.schedule_unique(decrement_name_chr, 0.05)
-        elif name_index > 0 and (keyboard.LEFT or (joystick_present and 
-        (joyin.get_axis(0) < -0.8 or str(joyin.get_hat(0)) == "(-1, 0)"))):
-            clock.schedule_unique(increment_name_index, 0.025)
-        elif name_index < len(player.name) and (keyboard.RIGHT or 
-        (joystick_present and (joyin.get_axis(0) > 0.8 
-        or str(joyin.get_hat(0)) == "(1, 0)"))):
+        elif keyboard.LEFT or (joystick_present and 
+        (joyin.get_axis(0) < -0.8 or str(joyin.get_hat(0)) == "(-1, 0)")):
             clock.schedule_unique(decrement_name_index, 0.025)
+        elif keyboard.RIGHT or (joystick_present and (joyin.get_axis(0) > 0.8 
+        or str(joyin.get_hat(0)) == "(1, 0)")):
+            clock.schedule_unique(increment_name_index, 0.025)
             
     if gameStatus == 1:
         if player.status < 30 and len(aliens) > 0:
@@ -132,12 +131,14 @@ def decrement_name_chr():
     player.name = "".join(player.name)
 
 def increment_name_index():
-    global name_index
-    if name_index > 0: name_index -= 1
+    global name_index, player
+    if name_index < len(player.name) - 1: name_index += 1
+    else: name_index = 0
 
 def decrement_name_index():
     global name_index, player
-    if name_index < len(player.name): name_index += 1
+    if name_index > 0: name_index -= 1
+    else: name_index = len(player.name) - 1
     
 def readHighScore():
     global highScore, score, player
