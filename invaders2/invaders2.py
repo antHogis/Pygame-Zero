@@ -138,15 +138,6 @@ def increment_name_index():
 def decrement_name_index():
     global name_index, player
     if name_index < len(player.name): name_index += 1
-
-def on_key_down(key):
-    global player
-    if gameStatus == 0 and key.name != "RETURN":
-        if len(key.name) == 1:
-            player.name += key.name
-        else:
-            if key.name == "BACKSPACE":
-                player.name = player.name[:-1]
     
 def readHighScore():
     global highScore, score, player
